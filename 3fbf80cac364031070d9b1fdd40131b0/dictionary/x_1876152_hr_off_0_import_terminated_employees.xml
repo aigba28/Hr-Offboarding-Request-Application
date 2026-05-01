@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element attributes="enforce_dot_walk_cross_scope_access=true" db_object_id="5de6068ac3a4431070d9b1fdd4013160" extends="sys_import_set_row" label="Hr Offboarding" max_length="40" name="x_1876152_hr_off_0_import_terminated_employees" type="collection">
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=termination_type" label="termination_type" max_length="40" name="u_termination_type" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=employee_email" label="employee_email" max_length="40" name="u_employee_email" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=last_working _date" label="last_working _date" max_length="40" name="u_last_working__date" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=department" label="department" max_length="40" name="u_department" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=termination_reason" label="termination_reason" max_length="40" name="u_termination_reason" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=last_working_date" label="last_working_date" max_length="40" name="u_last_working_date" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=hr_system_id" label="hr_system_id" max_length="40" name="u_hr_system_id" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=employee_id" label="employee_id" max_length="40" name="u_employee_id" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=job_title" label="job_title" max_length="40" name="u_job_title" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=employee" label="employee" max_length="40" name="u_employee" type="string"/>
+    </element>
+</database>

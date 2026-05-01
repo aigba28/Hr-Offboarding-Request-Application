@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[import { gs, GlideRecord } from "@servicenow/glide";
+
+/**
+ * Calculate completion percentage for an offboarding case based on task completion
+ * This function is called by business rule when tasks are created, updated, or deleted
+ */
+export function calculateCompletionPercentage(current, previous) {
+  var offboardingCaseId = current.getValue('offboarding_case');
+  
+  if (!offboardingCaseId) {
+    return;
+  }
+  
+  // Count total tasks and completed tasks for this case
+  var totalTasks = 0;
+  var completedTasks = 0;
+  
+  var taskGr = new GlideRecord('x_1876152_hr_off_0_offboarding_task');
+  taskGr.addQuery('offboarding_case', offboardingCaseId);
+  taskGr.query();
+  
+  while (taskGr.next()) {
+    totalTasks++;
+    // State 6 = Resolved, State 7 = Closed
+    if (taskGr.getValue('state') == '6' || taskGr.getValue('state') == '7') {
+      completedTasks++;
+    }
+  }
+  
+  // Calculate percentage
+  var completionPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  
+  // Update the parent offboarding case
+  var caseGr = new GlideRecord('x_1876152_hr_off_0_offboarding_case');
+  if (caseGr.get(offboardingCaseId)) {
+    caseGr.setValue('completion_percentage', completionPercentage);
+    caseGr.update();
+    
+    gs.info('Updated completion percentage for case ' + caseGr.getDisplayValue('number') + ' to ' + completionPercentage + '%');
+  }
+}
+
+/**
+ * Update workflow status based on completion percentage and task states
+ */
+export function updateWorkflowStatus(current, previous) {
+  var completionPercentage = parseInt(current.getValue('completion_percentage'));
+  var currentStatus = current.getValue('workflow_status');
+  var newStatus = currentStatus;
+  
+  // Determine new status based on completion percentage
+  if (completionPercentage >= 100) {
+    newStatus = 'completed';
+    // Also update the main task state
+    current.setValue('state', 6); // Resolved
+  } else if (completionPercentage >= 75) {
+    newStatus = 'pending_completion';
+  } else if (completionPercentage > 0) {
+    newStatus = 'in_progress';
+  }
+  
+  // Check for failed tasks
+  var failedTaskGr = new GlideRecord('x_1876152_hr_off_0_offboarding_task');
+  failedTaskGr.addQuery('offboarding_case', current.getUniqueValue());
+  failedTaskGr.addQuery('state', 8); // Cancelled/Failed
+  failedTaskGr.query();
+  
+  if (failedTaskGr.hasNext()) {
+    newStatus = 'failed';
+  }
+  
+  // Update status if changed
+  if (newStatus != currentStatus) {
+    current.setValue('workflow_status', newStatus);
+    gs.info('Updated workflow status for case ' + current.getDisplayValue('number') + ' from ' + currentStatus + ' to ' + newStatus);
+  }
+}
+
+/**
+ * Send notifications when tasks are assigned or completed
+ */
+export function sendTaskNotifications(current, previous) {
+  var taskTitle = current.getDisplayValue('short_description');
+  var assignedTo = current.getDisplayValue('assigned_to');
+  var caseNumber = '';
+  
+  // Get case information
+  var caseGr = new GlideRecord('x_1876152_hr_off_0_offboarding_case');
+  if (caseGr.get(current.getValue('offboarding_case'))) {
+    caseNumber = caseGr.getDisplayValue('number');
+  }
+  
+  // Send notification if task was assigned
+  if (current.assigned_to.changes() && current.getValue('assigned_to')) {
+    gs.info('Task assigned: ' + taskTitle + ' assigned to ' + assignedTo + ' for case ' + caseNumber);
+    // Here you would trigger actual email notifications
+    // Example: gs.eventQueue('hr_offboarding.task.assigned', current, assignedTo, caseNumber);
+  }
+  
+  // Send notification if task was completed
+  if (current.state.changes() && (current.getValue('state') == '6' || current.getValue('state') == '7')) {
+    gs.info('Task completed: ' + taskTitle + ' completed by ' + assignedTo + ' for case ' + caseNumber);
+    // Here you would trigger actual email notifications
+    // Example: gs.eventQueue('hr_offboarding.task.completed', current, assignedTo, caseNumber);
+  }
+  
+  // Send notification if task failed
+  if (current.state.changes() && current.getValue('state') == '8') {
+    gs.warn('Task failed: ' + taskTitle + ' failed for case ' + caseNumber);
+    // Example: gs.eventQueue('hr_offboarding.task.failed', current, assignedTo, caseNumber);
+  }
+}
+
+/**
+ * Get department assignment groups for task routing
+ */
+export function getDepartmentGroup(department) {
+  var groupMappings = {
+    'it': 'IT',
+    'facilities': 'Facilities',
+    'hr': 'Human Resources', 
+    'security': 'Security',
+    'manager': 'Managers'
+  };
+  
+  return groupMappings[department] || 'Default Assignment Group';
+}
+
+/**
+ * Generate additional tasks based on termination type or department
+ */
+export function generateAdditionalTasks(offboardingCaseId, terminationType, department) {
+  var additionalTasks = [];
+  
+  // Add department-specific tasks
+  if (department === 'Engineering' || department === 'IT') {
+    additionalTasks.push({
+      type: 'source_code_review',
+      department: 'it',
+      title: 'Source Code Access Review',
+      instructions: 'Review and revoke access to source code repositories and development tools.',
+      priority: 2
+    });
+  }
+  
+  if (department === 'Finance' || department === 'Accounting') {
+    additionalTasks.push({
+      type: 'financial_access_review',
+      department: 'security',
+      title: 'Financial System Access Review',
+      instructions: 'Review and revoke access to financial systems and sensitive data.',
+      priority: 1
+    });
+  }
+  
+  // Add termination-type specific tasks
+  if (terminationType === 'involuntary') {
+    additionalTasks.push({
+      type: 'immediate_access_revocation',
+      department: 'security',
+      title: 'Immediate Access Revocation',
+      instructions: 'Immediately revoke all system access due to involuntary termination.',
+      priority: 1
+    });
+  }
+  
+  // Create the additional tasks
+  additionalTasks.forEach(function(taskDef) {
+    var taskGr = new GlideRecord('x_1876152_hr_off_0_offboarding_task');
+    taskGr.initialize();
+    taskGr.setValue('offboarding_case', offboardingCaseId);
+    taskGr.setValue('task_type', taskDef.type);
+    taskGr.setValue('responsible_department', taskDef.department);
+    taskGr.setValue('short_description', taskDef.title);
+    taskGr.setValue('task_instructions', taskDef.instructions);
+    taskGr.setValue('priority', taskDef.priority);
+    taskGr.setValue('state', 1); // New
+    taskGr.setValue('auto_generated', true);
+    taskGr.insert();
+  });
+  
+  return additionalTasks.length;
+}
+
+/**
+ * Generate standard offboarding tasks for manually created cases
+ * This function is called by business rule when cases are created through the form
+ */
+export function generateStandardTasks(current, previous) {
+  var caseSysId = current.getUniqueValue();
+  var lastWorkingDate = current.getValue('last_working_date');
+  
+  if (!caseSysId || !lastWorkingDate) {
+    gs.warn('Cannot generate tasks: missing case ID or last working date');
+    return;
+  }
+
+  var standardTasks = [
+    {
+      type: 'it_asset_return',
+      department: 'it',
+      title: 'Return IT Assets',
+      instructions: 'Collect all IT equipment including laptop, monitor, phone, and accessories.',
+      priority: 2,
+      days_offset: 0
+    },
+    {
+      type: 'access_revocation',
+      department: 'it', 
+      title: 'Revoke System Access',
+      instructions: 'Disable Active Directory account, revoke VPN access, and remove application permissions.',
+      priority: 1,
+      days_offset: 0
+    },
+    {
+      type: 'badge_return',
+      department: 'facilities',
+      title: 'Return Access Badge',
+      instructions: 'Collect employee access badge and parking pass.',
+      priority: 3,
+      days_offset: 1
+    },
+    {
+      type: 'office_cleanup',
+      department: 'facilities',
+      title: 'Office Space Cleanup',
+      instructions: 'Clean out office/cubicle space and prepare for next occupant.',
+      priority: 4,
+      days_offset: 2
+    },
+    {
+      type: 'knowledge_transfer',
+      department: 'manager',
+      title: 'Knowledge Transfer Session',
+      instructions: 'Conduct knowledge transfer session with team members.',
+      priority: 2,
+      days_offset: -5
+    },
+    {
+      type: 'exit_interview',
+      department: 'hr',
+      title: 'Exit Interview',
+      instructions: 'Conduct exit interview to gather feedback and process documentation.',
+      priority: 3,
+      days_offset: -1
+    }
+  ];
+
+  var tasksCreated = 0;
+  var baseDate = new GlideDate(lastWorkingDate);
+
+  standardTasks.forEach(function(taskDef) {
+    var taskGr = new GlideRecord('x_1876152_hr_off_0_offboarding_task');
+    taskGr.initialize();
+    
+    taskGr.setValue('offboarding_case', caseSysId);
+    taskGr.setValue('task_type', taskDef.type);
+    taskGr.setValue('responsible_department', taskDef.department);
+    taskGr.setValue('short_description', taskDef.title);
+    taskGr.setValue('task_instructions', taskDef.instructions);
+    taskGr.setValue('priority', taskDef.priority);
+    taskGr.setValue('state', 1); // New
+    taskGr.setValue('auto_generated', true);
+    
+    // Calculate expected completion date
+    var expectedDate = new GlideDate(baseDate);
+    expectedDate.addDaysUTC(taskDef.days_offset);
+    taskGr.setValue('expected_completion_date', expectedDate.getDisplayValue());
+    
+    var taskSysId = taskGr.insert();
+    if (taskSysId) {
+      tasksCreated++;
+    }
+  });
+
+  // Update the case to mark tasks as generated
+  if (tasksCreated > 0) {
+    current.setValue('tasks_generated', true);
+    current.setValue('workflow_status', 'it_tasks_created');
+    current.update();
+    
+    gs.info('Generated ' + tasksCreated + ' standard tasks for offboarding case ' + current.getDisplayValue('number'));
+  } else {
+    gs.error('Failed to generate tasks for offboarding case ' + current.getDisplayValue('number'));
+  }
+}]]></content>
+        <external_source>false</external_source>
+        <path>x_1876152_hr_off_0/x-1876152-hr-offboarding-integration/1.0.0/src/server/offboardingUtils.js</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-30 17:01:13</sys_created_on>
+        <sys_id>230683223aee49959fa74bcd62ade7c4</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1876152_hr_off_0/x-1876152-hr-offboarding-integration/1.0.0/src/server/offboardingUtils.js</sys_name>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_update_name>sys_module_230683223aee49959fa74bcd62ade7c4</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-30 17:01:13</sys_updated_on>
+    </sys_module>
+</record_update>

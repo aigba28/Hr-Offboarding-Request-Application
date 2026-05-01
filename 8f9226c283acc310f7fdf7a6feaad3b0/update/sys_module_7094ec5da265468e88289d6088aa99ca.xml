@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[{
+  "name": "x-218201-hr-offboarding-integration",
+  "version": "1.0.0",
+  "description": "",
+  "license": "UNLICENSED",
+  "imports": {
+    "#now:*": "./@types/servicenow/fluent/*/index.js"
+  },
+  "scripts": {
+    "build": "now-sdk build",
+    "deploy": "now-sdk install",
+    "transform": "now-sdk transform",
+    "types": "now-sdk dependencies"
+  },
+  "devDependencies": {
+    "@servicenow/sdk": "4.6.0",
+    "@servicenow/glide": "27.0.5"
+  }
+}]]></content>
+        <external_source>false</external_source>
+        <path>x_218201_hr_offb_0/x-218201-hr-offboarding-integration/1.0.0/package.json</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-01 02:47:28</sys_created_on>
+        <sys_id>7094ec5da265468e88289d6088aa99ca</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_218201_hr_offb_0/x-218201-hr-offboarding-integration/1.0.0/package.json</sys_name>
+        <sys_package display_value="HR Offboarding Integration" source="x_218201_hr_offb_0">8f9226c283acc310f7fdf7a6feaad3b0</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">8f9226c283acc310f7fdf7a6feaad3b0</sys_scope>
+        <sys_update_name>sys_module_7094ec5da265468e88289d6088aa99ca</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-01 02:47:28</sys_updated_on>
+    </sys_module>
+</record_update>

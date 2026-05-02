@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>true</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_1876152_hr_off_0_offboarding_case</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Create or Link sys_user from Offboarding</name>
+        <order>100</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/ ) {
+
+    // Skip if no email to work with
+    if (!current.employee_email) {
+        return;
+    }
+
+    // Skip if employee reference is already set
+    if (!current.employee.nil()) {
+        return;
+    }
+
+    var email = current.employee_email.toString();
+
+    // 1. Check if a sys_user with this email already exists
+    var userGr = new GlideRecord('sys_user');
+    userGr.addQuery('email', email);
+    userGr.setLimit(1);
+    userGr.query();
+
+    if (userGr.next()) {
+        // Found an existing user — link to them
+        current.employee = userGr.sys_id;
+        gs.info('Linked offboarding case to existing user: ' + userGr.user_name);
+        return;
+    }
+
+    // 2. No match — create a new sys_user record
+    var fullName = current.employee ? current.employee.toString() : '';
+    var firstName = '';
+    var lastName = '';
+
+    if (fullName) {
+        var parts = fullName.split(' ');
+        firstName = parts[0];
+        lastName = parts.slice(1).join(' '); // handles middle/last names
+    }
+
+    var newUser = new GlideRecord('sys_user');
+    newUser.initialize();
+    newUser.user_name = email.split('@')[0]; // e.g., "jadamczyk0" from "jadamczyk0@europa.eu"
+    newUser.first_name = firstName;
+    newUser.last_name = lastName;
+    newUser.name = fullName;
+    newUser.email = email;
+    newUser.title = current.job_title ? current.job_title.toString() : '';
+    newUser.employee_number = current.employee_id ? current.employee_id.toString() : '';
+    newUser.active = false; // typically offboarded users are deactivated; flip to true if you want them active
+    
+    var newSysId = newUser.insert();
+
+    if (newSysId) {
+        current.employee = newSysId;
+        gs.info('Created new sys_user "' + fullName + '" (' + newSysId + ') and linked to offboarding case.');
+    } else {
+        gs.warn('Failed to create sys_user for ' + fullName + ' / ' + email);
+    }
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-02 18:47:10</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>44d8876ec32c871070d9b1fdd40131fa</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Create or Link sys_user from Offboarding</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_update_name>sys_script_44d8876ec32c871070d9b1fdd40131fa</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-02 18:47:10</sys_updated_on>
+        <template/>
+        <when>before</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=44d8876ec32c871070d9b1fdd40131fa"/>
+</record_update>

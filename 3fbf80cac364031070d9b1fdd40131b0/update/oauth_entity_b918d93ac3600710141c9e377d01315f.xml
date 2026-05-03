@@ -2,17 +2,17 @@
     <oauth_entity action="INSERT_OR_UPDATE">
         <access>public</access>
         <access_token_lifespan>1800</access_token_lifespan>
-        <active>true</active>
+        <active>false</active>
         <auth_aig_client>false</auth_aig_client>
         <auth_cimd_client>false</auth_cimd_client>
         <auth_code_lifespan>60</auth_code_lifespan>
         <auth_url/>
         <bind_token_to_session>false</bind_token_to_session>
         <certificate_url/>
-        <client_id>fdaddea9ab4240188fe8903d1e368c5d</client_id>
-        <client_secret>﷞﷟﷒6e8d0446c364031070d9b1fdd4013134﷬﷔1﷬﷭xuz1oCjIa9o6fdQxZ-Ybpg==I4uhyzB5oGTSRK9FVOQg7QHo9_sPlnZXzbK_Yj7E-oYsyW1gXPONYAvgcx_gAPUs﷮﷯</client_secret>
+        <client_id>1c055e7c15b945b898c1983a790ad4f8</client_id>
+        <client_secret>﷞﷟﷒3becaad2c36c0310141c9e377d013129﷬﷔1﷬﷭_pocvplK1mULKRcFoXlCVQ==qiLc4bZMI1mUcCgVk7EEVf3BvEcieQpF0uaXtJm3_gwa389RybLvyXjq45cPAOFL﷮﷯</client_secret>
         <client_type/>
-        <client_uuid>1c2592aac324871070d9b1fdd40131be</client_uuid>
+        <client_uuid>7918d93ac3600710141c9e377d01315f</client_uuid>
         <code_challenge_method>S256</code_challenge_method>
         <comments/>
         <default_grant_type>password</default_grant_type>
@@ -41,16 +41,16 @@
         <sub_claim>sys_id</sub_claim>
         <sys_class_name>oauth_entity</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2026-05-02 15:00:44</sys_created_on>
-        <sys_id>5c2592aac324871070d9b1fdd40131be</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_created_on>2026-05-03 05:12:14</sys_created_on>
+        <sys_id>b918d93ac3600710141c9e377d01315f</sys_id>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>Postman Integration</sys_name>
         <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
         <sys_policy/>
         <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
-        <sys_update_name>oauth_entity_5c2592aac324871070d9b1fdd40131be</sys_update_name>
+        <sys_update_name>oauth_entity_b918d93ac3600710141c9e377d01315f</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2026-05-02 15:07:55</sys_updated_on>
+        <sys_updated_on>2026-05-03 06:02:24</sys_updated_on>
         <token_format>opaque</token_format>
         <token_url/>
         <type>client</type>

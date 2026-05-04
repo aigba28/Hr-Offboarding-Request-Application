@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="oauth_entity_auth_scope_mapping">
+    <oauth_entity_auth_scope_mapping action="DELETE">
+        <auth_scope display_value="HR offboarding System">0c3e4612c320071070d9b1fdd40131f4</auth_scope>
+        <oauth_entity display_value="Postman Integration">024e25d6c3e8c31070d9b1fdd4013113</oauth_entity>
+        <sys_class_name>oauth_entity_auth_scope_mapping</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-01 19:51:54</sys_created_on>
+        <sys_id>d52ec212c320071070d9b1fdd4013175</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_update_name>oauth_entity_auth_scope_mapping_d52ec212c320071070d9b1fdd4013175</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-01 19:51:54</sys_updated_on>
+    </oauth_entity_auth_scope_mapping>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</application>
+        <file_path/>
+        <instance_id>73a0e520ff0a5ad0c80bf8e4fc4fd96b</instance_id>
+        <instance_name>dev290426</instance_name>
+        <name>oauth_entity_auth_scope_mapping_d52ec212c320071070d9b1fdd4013175</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="oauth_entity_auth_scope_mapping"><oauth_entity_auth_scope_mapping action="INSERT_OR_UPDATE"><auth_scope display_value="HR offboarding System">0c3e4612c320071070d9b1fdd40131f4</auth_scope><oauth_entity display_value="Postman Integration">024e25d6c3e8c31070d9b1fdd4013113</oauth_entity><sys_class_name>oauth_entity_auth_scope_mapping</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2026-05-01 19:51:54</sys_created_on><sys_id>d52ec212c320071070d9b1fdd4013175</sys_id><sys_mod_count>0</sys_mod_count><sys_name/><sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package><sys_policy/><sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope><sys_update_name>oauth_entity_auth_scope_mapping_d52ec212c320071070d9b1fdd4013175</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2026-05-01 19:51:54</sys_updated_on></oauth_entity_auth_scope_mapping></record_update>]]></payload>
+        <payload_hash>-1500960284</payload_hash>
+        <record_name/>
+        <reverted_from/>
+        <source>bbbf80cac364031070d9b1fdd40131b9</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-01 19:51:54</sys_created_on>
+        <sys_id>355eca12c320071070d9b1fdd40131d8</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19de51903370000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-01 19:51:54</sys_updated_on>
+        <type>Auth Scopes</type>
+        <update_guid>f15eca12e3200710f9999138e12436d7</update_guid>
+        <update_guid_history>f15eca12e3200710f9999138e12436d7:-1500960284</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="">3005de2ec324871070d9b1fdd40131dd</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-02 14:59:33</sys_created_on>
+        <sys_db_object display_value="" name="oauth_entity_auth_scope_mapping">oauth_entity_auth_scope_mapping</sys_db_object>
+        <sys_id>462bf51a171f445497488ef7b29db5a4</sys_id>
+        <sys_metadata>d52ec212c320071070d9b1fdd4013175</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name/>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_scope_delete display_value="">0421fb3fd39e452684a796cde63e5101</sys_scope_delete>
+        <sys_update_name>oauth_entity_auth_scope_mapping_d52ec212c320071070d9b1fdd4013175</sys_update_name>
+        <sys_update_version display_value="oauth_entity_auth_scope_mapping_d52ec212c320071070d9b1fdd4013175">355eca12c320071070d9b1fdd40131d8</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-02 14:59:33</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

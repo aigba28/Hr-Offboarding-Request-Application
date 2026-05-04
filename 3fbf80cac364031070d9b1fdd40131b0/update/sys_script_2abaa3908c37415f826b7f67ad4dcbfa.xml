@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_query>false</action_query>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_1876152_hr_off_0_offboarding_case</collection>
+        <condition/>
+        <description>Automatically generates standard offboarding tasks when a case is created manually</description>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Offboarding Task Generator</name>
+        <order>500</order>
+        <priority>100</priority>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[
+    // Check if tasks have already been generated
+    if (current.getValue('tasks_generated') == 'true') {
+      gs.info('Tasks already generated for case ' + current.getDisplayValue('number'));
+    } else {
+      // Generate tasks logic
+      var caseSysId = current.getUniqueValue();
+      var lastWorkingDate = current.getValue('last_working_date');
+      
+      if (!caseSysId || !lastWorkingDate) {
+        gs.warn('Cannot generate tasks: missing case ID or last working date');
+      } else {
+        gs.info('Starting task generation for case: ' + current.getDisplayValue('number'));
+
+        var standardTasks = [
+          {
+            type: 'it_asset_return',
+            department: 'it',
+            title: 'Return IT Assets',
+            instructions: 'Collect all IT equipment including laptop, monitor, phone, and accessories.',
+            priority: 2,
+            days_offset: 0
+          },
+          {
+            type: 'access_revocation',
+            department: 'it', 
+            title: 'Revoke System Access',
+            instructions: 'Disable Active Directory account, revoke VPN access, and remove application permissions.',
+            priority: 1,
+            days_offset: 0
+          },
+          {
+            type: 'badge_return',
+            department: 'facilities',
+            title: 'Return Access Badge',
+            instructions: 'Collect employee access badge and parking pass.',
+            priority: 3,
+            days_offset: 1
+          },
+          {
+            type: 'office_cleanup',
+            department: 'facilities',
+            title: 'Office Space Cleanup',
+            instructions: 'Clean out office/cubicle space and prepare for next occupant.',
+            priority: 4,
+            days_offset: 2
+          },
+          {
+            type: 'knowledge_transfer',
+            department: 'manager',
+            title: 'Knowledge Transfer Session',
+            instructions: 'Conduct knowledge transfer session with team members.',
+            priority: 2,
+            days_offset: -5
+          },
+          {
+            type: 'exit_interview',
+            department: 'hr',
+            title: 'Exit Interview',
+            instructions: 'Conduct exit interview to gather feedback and process documentation.',
+            priority: 3,
+            days_offset: -1
+          }
+        ];
+
+        var tasksCreated = 0;
+        
+        // Create base date object properly for scoped app
+        var baseDateTime = new GlideDateTime();
+        baseDateTime.setValue(lastWorkingDate);
+
+        for (var i = 0; i < standardTasks.length; i++) {
+          var taskDef = standardTasks[i];
+          
+          try {
+            var taskGr = new GlideRecord('x_1876152_hr_off_0_offboarding_task');
+            taskGr.initialize();
+            
+            taskGr.setValue('offboarding_case', caseSysId);
+            taskGr.setValue('task_type', taskDef.type);
+            taskGr.setValue('responsible_department', taskDef.department);
+            taskGr.setValue('short_description', taskDef.title);
+            taskGr.setValue('task_instructions', taskDef.instructions);
+            taskGr.setValue('priority', taskDef.priority);
+            taskGr.setValue('state', 1); // New
+            taskGr.setValue('auto_generated', true);
+            
+            // Calculate expected completion date
+            var expectedDate = new GlideDateTime();
+            expectedDate.setValue(lastWorkingDate);
+            expectedDate.addDaysUTC(taskDef.days_offset);
+            taskGr.setValue('expected_completion_date', expectedDate.getDisplayValue());
+            
+            var taskSysId = taskGr.insert();
+            if (taskSysId) {
+              tasksCreated++;
+              gs.info('Created task: ' + taskDef.title);
+            } else {
+              gs.error('Failed to create task: ' + taskDef.title);
+            }
+          } catch (taskError) {
+            gs.error('Error creating task ' + taskDef.title + ': ' + taskError.message);
+          }
+        }
+
+        // Update the case to mark tasks as generated
+        if (tasksCreated > 0) {
+          try {
+            var caseUpdate = new GlideRecord('x_1876152_hr_off_0_offboarding_case');
+            if (caseUpdate.get(caseSysId)) {
+              caseUpdate.setValue('tasks_generated', true);
+              caseUpdate.setValue('workflow_status', 'it_tasks_created');
+              caseUpdate.update();
+            }
+            
+            gs.info('Generated ' + tasksCreated + ' standard tasks for offboarding case ' + current.getDisplayValue('number'));
+          } catch (updateError) {
+            gs.error('Error updating case: ' + updateError.message);
+          }
+        } else {
+          gs.error('Failed to generate tasks for offboarding case ' + current.getDisplayValue('number'));
+        }
+      }
+    }
+  ]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-30 17:37:13</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>2abaa3908c37415f826b7f67ad4dcbfa</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Offboarding Task Generator</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_update_name>sys_script_2abaa3908c37415f826b7f67ad4dcbfa</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-30 17:37:13</sys_updated_on>
+        <template/>
+        <when>after</when>
+    </sys_script>
+    <sys_translated_text action="delete_multiple" query="documentkey=2abaa3908c37415f826b7f67ad4dcbfa"/>
+</record_update>

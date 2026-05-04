@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="oauth_entity">
+    <oauth_entity action="DELETE">
+        <access>public</access>
+        <access_token_lifespan>1800</access_token_lifespan>
+        <active>true</active>
+        <auth_aig_client>false</auth_aig_client>
+        <auth_cimd_client>false</auth_cimd_client>
+        <auth_code_lifespan>60</auth_code_lifespan>
+        <auth_url/>
+        <bind_token_to_session>false</bind_token_to_session>
+        <certificate_url/>
+        <client_id>fdaddea9ab4240188fe8903d1e368c5d</client_id>
+        <client_secret>﷞﷟﷒6e8d0446c364031070d9b1fdd4013134﷬﷔1﷬﷭xuz1oCjIa9o6fdQxZ-Ybpg==I4uhyzB5oGTSRK9FVOQg7QHo9_sPlnZXzbK_Yj7E-oYsyW1gXPONYAvgcx_gAPUs﷮﷯</client_secret>
+        <client_type/>
+        <client_uuid>1c2592aac324871070d9b1fdd40131be</client_uuid>
+        <code_challenge_method>S256</code_challenge_method>
+        <comments/>
+        <default_grant_type>password</default_grant_type>
+        <extend_refresh_token_expiry>false</extend_refresh_token_expiry>
+        <id_token_lifespan>86400</id_token_lifespan>
+        <inbound_grant_type>authz_code</inbound_grant_type>
+        <jwt_provider/>
+        <login_url/>
+        <logo_url/>
+        <message_signature_lifespan>60</message_signature_lifespan>
+        <mobile_client>false</mobile_client>
+        <name>Postman Integration</name>
+        <oauth_api_script/>
+        <only_rest_processor>false</only_rest_processor>
+        <protocol_name/>
+        <public_client>false</public_client>
+        <redirect_url>https://oauth.pstmn.io/v1/browser-callback</redirect_url>
+        <refresh_token_lifespan>8640000</refresh_token_lifespan>
+        <refresh_token_url/>
+        <restricted_binding>false</restricted_binding>
+        <revoke_token_url/>
+        <salt/>
+        <scope_restriction_status>unrestricted</scope_restriction_status>
+        <send_client_credentials_as>request_body_parameter</send_client_credentials_as>
+        <skip_authorize>false</skip_authorize>
+        <sub_claim>sys_id</sub_claim>
+        <sys_class_name>oauth_entity</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-02 15:00:44</sys_created_on>
+        <sys_id>5c2592aac324871070d9b1fdd40131be</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Postman Integration</sys_name>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_update_name>oauth_entity_5c2592aac324871070d9b1fdd40131be</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-02 15:07:55</sys_updated_on>
+        <token_format>opaque</token_format>
+        <token_url/>
+        <type>client</type>
+        <use_mutual_auth>false</use_mutual_auth>
+        <use_pkce>false</use_pkce>
+        <user/>
+    </oauth_entity>
+<sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</application>
+        <file_path/>
+        <instance_id>f087bcc9932c0bd4401cddd548373c21</instance_id>
+        <instance_name>dev392893</instance_name>
+        <name>oauth_entity_5c2592aac324871070d9b1fdd40131be</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="oauth_entity">
+    <oauth_entity action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <access_token_lifespan>1800</access_token_lifespan>
+        <active>true</active>
+        <auth_aig_client>false</auth_aig_client>
+        <auth_cimd_client>false</auth_cimd_client>
+        <auth_code_lifespan>60</auth_code_lifespan>
+        <auth_url/>
+        <bind_token_to_session>false</bind_token_to_session>
+        <certificate_url/>
+        <client_id>fdaddea9ab4240188fe8903d1e368c5d</client_id>
+        <client_secret>﷞﷟﷒6e8d0446c364031070d9b1fdd4013134﷬﷔1﷬﷭xuz1oCjIa9o6fdQxZ-Ybpg==I4uhyzB5oGTSRK9FVOQg7QHo9_sPlnZXzbK_Yj7E-oYsyW1gXPONYAvgcx_gAPUs﷮﷯</client_secret>
+        <client_type/>
+        <client_uuid>1c2592aac324871070d9b1fdd40131be</client_uuid>
+        <code_challenge_method>S256</code_challenge_method>
+        <comments/>
+        <default_grant_type>password</default_grant_type>
+        <extend_refresh_token_expiry>false</extend_refresh_token_expiry>
+        <id_token_lifespan>86400</id_token_lifespan>
+        <inbound_grant_type>authz_code</inbound_grant_type>
+        <jwt_provider/>
+        <login_url/>
+        <logo_url/>
+        <message_signature_lifespan>60</message_signature_lifespan>
+        <mobile_client>false</mobile_client>
+        <name>Postman Integration</name>
+        <oauth_api_script/>
+        <only_rest_processor>false</only_rest_processor>
+        <protocol_name/>
+        <public_client>false</public_client>
+        <redirect_url>https://oauth.pstmn.io/v1/browser-callback</redirect_url>
+        <refresh_token_lifespan>8640000</refresh_token_lifespan>
+        <refresh_token_url/>
+        <restricted_binding>false</restricted_binding>
+        <revoke_token_url/>
+        <salt/>
+        <scope_restriction_status>unrestricted</scope_restriction_status>
+        <send_client_credentials_as>request_body_parameter</send_client_credentials_as>
+        <skip_authorize>false</skip_authorize>
+        <sub_claim>sys_id</sub_claim>
+        <sys_class_name>oauth_entity</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-02 15:00:44</sys_created_on>
+        <sys_id>5c2592aac324871070d9b1fdd40131be</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_name>Postman Integration</sys_name>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_update_name>oauth_entity_5c2592aac324871070d9b1fdd40131be</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-02 15:07:55</sys_updated_on>
+        <token_format>opaque</token_format>
+        <token_url/>
+        <type>client</type>
+        <use_mutual_auth>false</use_mutual_auth>
+        <use_pkce>false</use_pkce>
+        <user/>
+    </oauth_entity>
+</record_update>]]></payload>
+        <payload_hash>-1284578657</payload_hash>
+        <record_name>Postman Integration</record_name>
+        <reverted_from/>
+        <source>bd06df22c360c310141c9e377d0131a9</source>
+        <source_table>sys_upgrade_history</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-02 19:43:51</sys_created_on>
+        <sys_id>e9161f62c360c310141c9e377d013140</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19dea3800500000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-02 19:43:51</sys_updated_on>
+        <type>Application Registries</type>
+        <update_guid>a9161f620d60c3103641e008f2e7c040</update_guid>
+        <update_guid_history>a9161f620d60c3103641e008f2e7c040:-1284578657</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="Postman Integration">78e71df6c3600710141c9e377d013116</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-03 05:10:58</sys_created_on>
+        <sys_db_object display_value="" name="oauth_entity">oauth_entity</sys_db_object>
+        <sys_id>8b41f6f0e7e54df0a5dbd28d6d87e840</sys_id>
+        <sys_metadata>5c2592aac324871070d9b1fdd40131be</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Postman Integration</sys_name>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_scope_delete display_value="">0421fb3fd39e452684a796cde63e5101</sys_scope_delete>
+        <sys_update_name>oauth_entity_5c2592aac324871070d9b1fdd40131be</sys_update_name>
+        <sys_update_version display_value="oauth_entity_5c2592aac324871070d9b1fdd40131be">e9161f62c360c310141c9e377d013140</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-03 05:10:58</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

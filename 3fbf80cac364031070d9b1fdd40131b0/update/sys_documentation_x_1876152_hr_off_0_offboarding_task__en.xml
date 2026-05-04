@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="" label="Offboarding Task" language="en" table="x_1876152_hr_off_0_offboarding_task">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element/>
+            <help/>
+            <hint/>
+            <label>Offboarding Task</label>
+            <language>en</language>
+            <name>x_1876152_hr_off_0_offboarding_task</name>
+            <plural>Offboarding Tasks</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-04-30 16:33:47</sys_created_on>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Offboarding Task</sys_name>
+            <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+            <sys_update_name>sys_documentation_x_1876152_hr_off_0_offboarding_task__en</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-04-30 16:33:47</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

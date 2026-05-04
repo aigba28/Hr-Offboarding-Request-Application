@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[import { gs, GlideRecord } from "@servicenow/glide";
+
+/**
+ * HR Offboarding API Handler
+ * Processes incoming offboarding requests from external HR systems
+ * 
+ * @param {Object} request - REST API request object
+ * @param {Object} response - REST API response object
+ */
+export function hrOffboardingHandler(request, response) {
+  try {
+    // Validate HTTP method
+    if (request.method !== 'POST') {
+      response.setStatus(405);
+      response.setBody({ 
+        error: 'Method Not Allowed', 
+        message: 'Only POST method is supported' 
+      });
+      return;
+    }
+
+    // Parse request body
+    let requestBody;
+    try {
+      requestBody = JSON.parse(request.body.data);
+    } catch (e) {
+      response.setStatus(400);
+      response.setBody({ 
+        error: 'Invalid JSON', 
+        message: 'Request body must be valid JSON' 
+      });
+      return;
+    }
+
+    // Validate required fields
+    const requiredFields = ['employee_id', 'employee_email', 'employee_name', 'termination_type', 'last_working_date'];
+    const missingFields = requiredFields.filter(field => !requestBody[field]);
+    
+    if (missingFields.length > 0) {
+      response.setStatus(400);
+      response.setBody({ 
+        error: 'Missing Required Fields', 
+        message: `Missing required fields: ${missingFields.join(', ')}`,
+        required_fields: requiredFields
+      });
+      return;
+    }
+
+    // Find or create the employee user record
+    let employeeRecord = findOrCreateEmployee(requestBody);
+    let managerRecord = null;
+
+    // Find manager if provided
+    if (requestBody.manager_email) {
+      managerRecord = findUserByEmail(requestBody.manager_email);
+    }
+
+    // Create the offboarding case
+    const offboardingCase = createOffboardingCase(requestBody, employeeRecord, managerRecord);
+
+    if (!offboardingCase) {
+      response.setStatus(500);
+      response.setBody({ 
+        error: 'Internal Server Error', 
+        message: 'Failed to create offboarding case' 
+      });
+      return;
+    }
+
+    // Generate standard offboarding tasks
+    generateOffboardingTasks(offboardingCase);
+
+    // Send notifications
+    sendNotifications(offboardingCase, employeeRecord, managerRecord);
+
+    // Success response
+    response.setStatus(201);
+    response.setBody({
+      success: true,
+      message: 'Offboarding case created successfully',
+      case_id: offboardingCase.getUniqueValue(),
+      case_number: offboardingCase.getDisplayValue('number'),
+      employee_id: requestBody.employee_id,
+      workflow_status: 'initiated',
+      tasks_generated: true
+    });
+
+  } catch (error) {
+    gs.error('HR Offboarding API Error: ' + error.message);
+    response.setStatus(500);
+    response.setBody({ 
+      error: 'Internal Server Error', 
+      message: 'An unexpected error occurred while processing the request' 
+    });
+  }
+}
+
+/**
+ * Find existing user or create new user record
+ */
+function findOrCreateEmployee(requestData) {
+  // First try to find by employee ID
+  let userGr = new GlideRecord('sys_user');
+  userGr.addQuery('employee_number', requestData.employee_id);
+  userGr.query();
+
+  if (userGr.next()) {
+    return userGr;
+  }
+
+  // Try to find by email
+  userGr = new GlideRecord('sys_user');
+  userGr.addQuery('email', requestData.employee_email);
+  userGr.query();
+
+  if (userGr.next()) {
+    // Update employee number if found by email
+    userGr.setValue('employee_number', requestData.employee_id);
+    userGr.update();
+    return userGr;
+  }
+
+  // Create new user record
+  userGr = new GlideRecord('sys_user');
+  userGr.initialize();
+  userGr.setValue('employee_number', requestData.employee_id);
+  userGr.setValue('email', requestData.employee_email);
+  userGr.setValue('user_name', requestData.employee_email);
+  
+  // Parse name
+  const nameParts = (requestData.employee_name || '').split(' ');
+  if (nameParts.length > 0) {
+    userGr.setValue('first_name', nameParts[0]);
+    if (nameParts.length > 1) {
+      userGr.setValue('last_name', nameParts.slice(1).join(' '));
+    }
+  }
+
+  userGr.setValue('department', requestData.department || '');
+  userGr.setValue('title', requestData.job_title || '');
+  userGr.setValue('active', false); // Inactive since they're being offboarded
+  
+  const userSysId = userGr.insert();
+  return userGr;
+}
+
+/**
+ * Find user by email address
+ */
+function findUserByEmail(email) {
+  const userGr = new GlideRecord('sys_user');
+  userGr.addQuery('email', email);
+  userGr.query();
+  
+  if (userGr.next()) {
+    return userGr;
+  }
+  return null;
+}
+
+/**
+ * Create the main offboarding case record
+ */
+function createOffboardingCase(requestData, employeeRecord, managerRecord) {
+  const caseGr = new GlideRecord('x_1876152_hr_off_0_offboarding_case');
+  caseGr.initialize();
+
+  // Employee information
+  caseGr.setValue('employee', employeeRecord.getUniqueValue());
+  caseGr.setValue('employee_id', requestData.employee_id);
+  caseGr.setValue('employee_email', requestData.employee_email);
+  caseGr.setValue('department', requestData.department || '');
+  caseGr.setValue('job_title', requestData.job_title || '');
+  
+  if (managerRecord) {
+    caseGr.setValue('manager', managerRecord.getUniqueValue());
+  }
+
+  // Offboarding details
+  caseGr.setValue('termination_type', requestData.termination_type);
+  caseGr.setValue('last_working_date', requestData.last_working_date);
+  caseGr.setValue('termination_reason', requestData.termination_reason || '');
+
+  // External system information
+  caseGr.setValue('hr_system_id', requestData.hr_system_id || '');
+  caseGr.setValue('hr_system_name', requestData.hr_system_name || 'External HR System');
+
+  // Task information
+  caseGr.setValue('short_description', `Employee Offboarding: ${requestData.employee_name}`);
+  caseGr.setValue('description', `Offboarding process for employee ${requestData.employee_name} (${requestData.employee_id})`);
+  
+  // Workflow status
+  caseGr.setValue('workflow_status', 'initiated');
+  caseGr.setValue('state', 1); // New
+  caseGr.setValue('priority', 3); // Moderate
+  
+  const caseSysId = caseGr.insert();
+  return caseGr;
+}
+
+/**
+ * Generate standard offboarding tasks
+ */
+function generateOffboardingTasks(offboardingCase) {
+  const standardTasks = [
+    {
+      type: 'it_asset_return',
+      department: 'it',
+      title: 'Return IT Assets',
+      instructions: 'Collect all IT equipment including laptop, monitor, phone, and accessories.',
+      priority: 2,
+      days_offset: 0
+    },
+    {
+      type: 'access_revocation',
+      department: 'it', 
+      title: 'Revoke System Access',
+      instructions: 'Disable Active Directory account, revoke VPN access, and remove application permissions.',
+      priority: 1,
+      days_offset: 0
+    },
+    {
+      type: 'badge_return',
+      department: 'facilities',
+      title: 'Return Access Badge',
+      instructions: 'Collect employee access badge and parking pass.',
+      priority: 3,
+      days_offset: 1
+    },
+    {
+      type: 'office_cleanup',
+      department: 'facilities',
+      title: 'Office Space Cleanup',
+      instructions: 'Clean out office/cubicle space and prepare for next occupant.',
+      priority: 4,
+      days_offset: 2
+    },
+    {
+      type: 'knowledge_transfer',
+      department: 'manager',
+      title: 'Knowledge Transfer Session',
+      instructions: 'Conduct knowledge transfer session with team members.',
+      priority: 2,
+      days_offset: -5
+    },
+    {
+      type: 'exit_interview',
+      department: 'hr',
+      title: 'Exit Interview',
+      instructions: 'Conduct exit interview to gather feedback and process documentation.',
+      priority: 3,
+      days_offset: -1
+    }
+  ];
+
+  const caseSysId = offboardingCase.getUniqueValue();
+  const lastWorkingDate = new GlideDate(offboardingCase.getValue('last_working_date'));
+
+  standardTasks.forEach(function(taskDef) {
+    const taskGr = new GlideRecord('x_1876152_hr_off_0_offboarding_task');
+    taskGr.initialize();
+    
+    taskGr.setValue('offboarding_case', caseSysId);
+    taskGr.setValue('task_type', taskDef.type);
+    taskGr.setValue('responsible_department', taskDef.department);
+    taskGr.setValue('short_description', taskDef.title);
+    taskGr.setValue('task_instructions', taskDef.instructions);
+    taskGr.setValue('priority', taskDef.priority);
+    taskGr.setValue('state', 1); // New
+    taskGr.setValue('auto_generated', true);
+    
+    // Calculate expected completion date
+    const expectedDate = new GlideDate(lastWorkingDate);
+    expectedDate.addDaysUTC(taskDef.days_offset);
+    taskGr.setValue('expected_completion_date', expectedDate.getDisplayValue());
+    
+    taskGr.insert();
+  });
+
+  // Update case to indicate tasks were generated
+  offboardingCase.setValue('tasks_generated', true);
+  offboardingCase.setValue('workflow_status', 'it_tasks_created');
+  offboardingCase.update();
+}
+
+/**
+ * Send notifications to stakeholders
+ */
+function sendNotifications(offboardingCase, employeeRecord, managerRecord) {
+  // This would trigger email notifications
+  // Implementation would depend on notification requirements
+  gs.info(`Offboarding case created for ${employeeRecord.getDisplayValue('name')} - Case: ${offboardingCase.getDisplayValue('number')}`);
+  
+  // Update case to indicate notifications were sent
+  offboardingCase.setValue('notifications_sent', true);
+  offboardingCase.setValue('workflow_status', 'manager_notified');
+  offboardingCase.update();
+}]]></content>
+        <external_source>false</external_source>
+        <path>x_1876152_hr_off_0/x-1876152-hr-offboarding-integration/1.0.0/src/server/hrOffboardingHandler.js</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-30 17:01:13</sys_created_on>
+        <sys_id>5df3da8627b345238ac167c70d2d8c5c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1876152_hr_off_0/x-1876152-hr-offboarding-integration/1.0.0/src/server/hrOffboardingHandler.js</sys_name>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_update_name>sys_module_5df3da8627b345238ac167c70d2d8c5c</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-30 17:01:13</sys_updated_on>
+    </sys_module>
+</record_update>

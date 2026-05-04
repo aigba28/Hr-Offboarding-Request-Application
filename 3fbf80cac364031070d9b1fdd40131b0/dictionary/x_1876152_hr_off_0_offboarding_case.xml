@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element attributes="enforce_dot_walk_cross_scope_access=true" audit="true" db_object_id="4667144ec3a4031070d9b1fdd4013101" extends="task" label="HR Offboarding Case" max_length="40" name="x_1876152_hr_off_0_offboarding_case" text_index="true" type="collection">
+        <element default="0" label="Completion Percentage" max_length="40" name="completion_percentage" type="integer"/>
+        <element attributes="encode_utf8=false" display="true" label="Employee" mandatory="true" max_length="32" name="employee" reference="sys_user" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Department" max_length="100" name="department" type="string"/>
+        <element attributes="edge_encryption_enabled=true" default="External HR System" label="HR System Name" max_length="50" name="hr_system_name" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Job Title" max_length="100" name="job_title" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Last Working Date" mandatory="true" max_length="40" name="last_working_date" type="glide_date"/>
+        <element label="Notifications Sent" max_length="40" name="notifications_sent" type="boolean"/>
+        <element attributes="encode_utf8=false" label="Manager" max_length="32" name="manager" reference="sys_user" type="reference"/>
+        <element choice="1" label="Termination Type" mandatory="true" max_length="40" name="termination_type" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="End of Contract" sequence="4" value="end_of_contract"/>
+                <element inactive_on_update="false" label="Involuntary Termination" sequence="2" value="involuntary"/>
+                <element inactive_on_update="false" label="Layoff" sequence="5" value="layoff"/>
+                <element inactive_on_update="false" label="Retirement" sequence="3" value="retirement"/>
+                <element inactive_on_update="false" label="Voluntary Resignation" sequence="1" value="voluntary"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" label="Termination Reason" max_length="500" name="termination_reason" type="string"/>
+        <element choice="1" default="initiated" label="Workflow Status" max_length="40" name="workflow_status" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="In Progress" sequence="5" value="in_progress"/>
+                <element inactive_on_update="false" label="Manager Notified" sequence="2" value="manager_notified"/>
+                <element inactive_on_update="false" label="IT Tasks Created" sequence="3" value="it_tasks_created"/>
+                <element inactive_on_update="false" label="Failed" sequence="8" value="failed"/>
+                <element inactive_on_update="false" label="Initiated" sequence="1" value="initiated"/>
+                <element inactive_on_update="false" label="Completed" sequence="7" value="completed"/>
+                <element inactive_on_update="false" label="Facilities Tasks Created" sequence="4" value="facilities_tasks_created"/>
+                <element inactive_on_update="false" label="Pending Completion" sequence="6" value="pending_completion"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" label="Employee ID" mandatory="true" max_length="50" name="employee_id" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="HR System ID" mandatory="true" max_length="100" name="hr_system_id" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Employee Email" mandatory="true" max_length="255" name="employee_email" type="string"/>
+        <element label="Tasks Generated" max_length="40" name="tasks_generated" type="boolean"/>
+    </element>
+</database>

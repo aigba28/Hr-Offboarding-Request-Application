@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="termination_type" table="x_1876152_hr_off_0_offboarding_case" version="3">
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>termination_type</element>
+            <name>x_1876152_hr_off_0_offboarding_case</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-04-30 16:33:56</sys_created_on>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>termination_type</sys_name>
+            <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+            <sys_update_name>sys_choice_x_1876152_hr_off_0_offboarding_case_termination_type</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-04-30 16:33:56</sys_updated_on>
+        </sys_choice_set>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>termination_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Voluntary Resignation</label>
+            <language>en</language>
+            <name>x_1876152_hr_off_0_offboarding_case</name>
+            <sequence>1</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-04-30 18:10:58</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-04-30 18:10:58</sys_updated_on>
+            <value>voluntary</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>termination_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Involuntary Termination</label>
+            <language>en</language>
+            <name>x_1876152_hr_off_0_offboarding_case</name>
+            <sequence>2</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-04-30 18:10:58</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-04-30 18:10:58</sys_updated_on>
+            <value>involuntary</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>termination_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Retirement</label>
+            <language>en</language>
+            <name>x_1876152_hr_off_0_offboarding_case</name>
+            <sequence>3</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-04-30 18:10:58</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-04-30 18:10:58</sys_updated_on>
+            <value>retirement</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>termination_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>End of Contract</label>
+            <language>en</language>
+            <name>x_1876152_hr_off_0_offboarding_case</name>
+            <sequence>4</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-04-30 18:10:58</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-04-30 18:10:58</sys_updated_on>
+            <value>end_of_contract</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>termination_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Layoff</label>
+            <language>en</language>
+            <name>x_1876152_hr_off_0_offboarding_case</name>
+            <sequence>5</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-04-30 18:10:58</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-04-30 18:10:58</sys_updated_on>
+            <value>layoff</value>
+        </sys_choice>
+    </sys_choice>
+</record_update>

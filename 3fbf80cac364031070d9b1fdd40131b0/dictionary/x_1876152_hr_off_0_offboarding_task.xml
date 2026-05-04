@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element attributes="enforce_dot_walk_cross_scope_access=true" audit="true" db_object_id="bd671c8ec364031070d9b1fdd401310d" extends="task" label="Offboarding Task" max_length="40" name="x_1876152_hr_off_0_offboarding_task" type="collection">
+        <element default="true" label="Auto Generated" max_length="40" name="auto_generated" read_only="true" read_only_option="instance_configured" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Task Instructions" max_length="1000" name="task_instructions" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Completion Notes" max_length="1000" name="completion_notes" type="string"/>
+        <element choice="1" label="Responsible Department" mandatory="true" max_length="40" name="responsible_department" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="IT Department" sequence="1" value="it"/>
+                <element inactive_on_update="false" label="Facilities" sequence="2" value="facilities"/>
+                <element inactive_on_update="false" label="Security" sequence="4" value="security"/>
+                <element inactive_on_update="false" label="Direct Manager" sequence="5" value="manager"/>
+                <element inactive_on_update="false" label="Human Resources" sequence="3" value="hr"/>
+            </choice>
+        </element>
+        <element attributes="encode_utf8=false" label="Offboarding Case" mandatory="true" max_length="32" name="offboarding_case" reference="x_1876152_hr_off_0_offboarding_case" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Expected Completion Date" max_length="40" name="expected_completion_date" type="glide_date"/>
+        <element choice="1" label="Task Type" mandatory="true" max_length="40" name="task_type" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Access Revocation" sequence="2" value="access_revocation"/>
+                <element inactive_on_update="false" label="Benefits Termination" sequence="8" value="benefits_termination"/>
+                <element inactive_on_update="false" label="IT Asset Return" sequence="1" value="it_asset_return"/>
+                <element inactive_on_update="false" label="Custom Task" sequence="9" value="custom"/>
+                <element inactive_on_update="false" label="Knowledge Transfer" sequence="5" value="knowledge_transfer"/>
+                <element inactive_on_update="false" label="Final Payroll" sequence="7" value="final_payroll"/>
+                <element inactive_on_update="false" label="Exit Interview" sequence="6" value="exit_interview"/>
+                <element inactive_on_update="false" label="Office Cleanup" sequence="4" value="office_cleanup"/>
+                <element inactive_on_update="false" label="Badge Return" sequence="3" value="badge_return"/>
+            </choice>
+        </element>
+    </element>
+</database>

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[/**
+ * Debug script to test offboarding case and task creation
+ * This script can be run in ServiceNow Background Scripts to test functionality
+ */
+
+function debugOffboardingTaskGeneration() {
+  gs.info('=== STARTING OFFBOARDING DEBUG TEST ===');
+  
+  try {
+    // Step 1: Create a test user if needed
+    var testUser = createTestUser();
+    gs.info('Test user created/found: ' + testUser.getDisplayValue('name') + ' (' + testUser.getUniqueValue() + ')');
+    
+    // Step 2: Create a test offboarding case
+    var testCase = createTestOffboardingCase(testUser);
+    gs.info('Test case created: ' + testCase.getDisplayValue('number') + ' (' + testCase.getUniqueValue() + ')');
+    
+    // Step 3: Check if business rule fired automatically
+    gs.info('Waiting 2 seconds for business rule to fire...');
+    
+    // Step 4: Check if tasks were created
+    var taskCount = countTasksForCase(testCase.getUniqueValue());
+    gs.info('Tasks found after automatic creation: ' + taskCount);
+    
+    if (taskCount === 0) {
+      gs.info('No tasks created automatically. Attempting manual task generation...');
+      var manualTaskCount = manuallyGenerateTasks(testCase);
+      gs.info('Tasks created manually: ' + manualTaskCount);
+    }
+    
+    // Step 5: Final verification
+    var finalTaskCount = countTasksForCase(testCase.getUniqueValue());
+    gs.info('Final task count: ' + finalTaskCount);
+    
+    if (finalTaskCount > 0) {
+      listTasksForCase(testCase.getUniqueValue());
+    }
+    
+    gs.info('=== DEBUG TEST COMPLETE ===');
+    gs.info('Test case sys_id: ' + testCase.getUniqueValue());
+    gs.info('Test case number: ' + testCase.getDisplayValue('number'));
+    
+  } catch (error) {
+    gs.error('DEBUG TEST ERROR: ' + error.message);
+    gs.error('Stack trace: ' + error.stack);
+  }
+}
+
+function createTestUser() {
+  // First check if test user already exists
+  var userGr = new GlideRecord('sys_user');
+  userGr.addQuery('user_name', 'test.offboarding@company.com');
+  userGr.query();
+  
+  if (userGr.next()) {
+    return userGr;
+  }
+  
+  // Create new test user
+  userGr = new GlideRecord('sys_user');
+  userGr.initialize();
+  userGr.setValue('user_name', 'test.offboarding@company.com');
+  userGr.setValue('email', 'test.offboarding@company.com');
+  userGr.setValue('first_name', 'Test');
+  userGr.setValue('last_name', 'Offboarding');
+  userGr.setValue('employee_number', 'DEBUG001');
+  userGr.setValue('active', false);
+  userGr.insert();
+  
+  return userGr;
+}
+
+function createTestOffboardingCase(userRecord) {
+  var caseGr = new GlideRecord('x_1876152_hr_off_0_offboarding_case');
+  caseGr.initialize();
+  
+  // Set required fields
+  caseGr.setValue('employee', userRecord.getUniqueValue());
+  caseGr.setValue('employee_id', 'DEBUG001');
+  caseGr.setValue('employee_email', 'test.offboarding@company.com');
+  caseGr.setValue('department', 'IT');
+  caseGr.setValue('job_title', 'Test Engineer');
+  caseGr.setValue('termination_type', 'voluntary');
+  caseGr.setValue('hr_system_id', 'DEBUG-TEST-123');
+  caseGr.setValue('hr_system_name', 'Debug Test System');
+  caseGr.setValue('short_description', 'Debug Test Offboarding Case');
+  
+  // Set last working date to 7 days from now
+  var futureDate = new GlideDate();
+  futureDate.addDaysUTC(7);
+  caseGr.setValue('last_working_date', futureDate.getDisplayValue());
+  
+  // Basic task fields
+  caseGr.setValue('state', 1); // New
+  caseGr.setValue('priority', 3); // Moderate
+  
+  gs.info('About to insert offboarding case...');
+  var caseSysId = caseGr.insert();
+  gs.info('Case inserted with sys_id: ' + caseSysId);
+  
+  return caseGr;
+}
+
+function countTasksForCase(caseSysId) {
+  var taskGr = new GlideRecord('x_1876152_hr_off_0_offboarding_task');
+  taskGr.addQuery('offboarding_case', caseSysId);
+  taskGr.query();
+  
+  var count = 0;
+  while (taskGr.next()) {
+    count++;
+  }
+  
+  return count;
+}
+
+function listTasksForCase(caseSysId) {
+  gs.info('=== TASKS FOR CASE ===');
+  var taskGr = new GlideRecord('x_1876152_hr_off_0_offboarding_task');
+  taskGr.addQuery('offboarding_case', caseSysId);
+  taskGr.query();
+  
+  while (taskGr.next()) {
+    gs.info('Task: ' + taskGr.getDisplayValue('short_description') + 
+            ' | Type: ' + taskGr.getValue('task_type') + 
+            ' | Dept: ' + taskGr.getValue('responsible_department') +
+            ' | Due: ' + taskGr.getDisplayValue('expected_completion_date'));
+  }
+}
+
+function manuallyGenerateTasks(caseRecord) {
+  gs.info('Manually generating tasks for case: ' + caseRecord.getUniqueValue());
+  
+  var caseSysId = caseRecord.getUniqueValue();
+  var lastWorkingDate = caseRecord.getValue('last_working_date');
+  
+  if (!caseSysId || !lastWorkingDate) {
+    gs.error('Cannot generate tasks: missing case ID or last working date');
+    return 0;
+  }
+
+  var standardTasks = [
+    {
+      type: 'it_asset_return',
+      department: 'it',
+      title: 'Return IT Assets',
+      instructions: 'Collect all IT equipment including laptop, monitor, phone, and accessories.',
+      priority: 2,
+      days_offset: 0
+    },
+    {
+      type: 'access_revocation',
+      department: 'it', 
+      title: 'Revoke System Access',
+      instructions: 'Disable Active Directory account, revoke VPN access, and remove application permissions.',
+      priority: 1,
+      days_offset: 0
+    },
+    {
+      type: 'badge_return',
+      department: 'facilities',
+      title: 'Return Access Badge',
+      instructions: 'Collect employee access badge and parking pass.',
+      priority: 3,
+      days_offset: 1
+    },
+    {
+      type: 'office_cleanup',
+      department: 'facilities',
+      title: 'Office Space Cleanup',
+      instructions: 'Clean out office/cubicle space and prepare for next occupant.',
+      priority: 4,
+      days_offset: 2
+    },
+    {
+      type: 'knowledge_transfer',
+      department: 'manager',
+      title: 'Knowledge Transfer Session',
+      instructions: 'Conduct knowledge transfer session with team members.',
+      priority: 2,
+      days_offset: -5
+    },
+    {
+      type: 'exit_interview',
+      department: 'hr',
+      title: 'Exit Interview',
+      instructions: 'Conduct exit interview to gather feedback and process documentation.',
+      priority: 3,
+      days_offset: -1
+    }
+  ];
+
+  var tasksCreated = 0;
+  var baseDate = new GlideDate(lastWorkingDate);
+  gs.info('Base date for task scheduling: ' + baseDate.getDisplayValue());
+
+  for (var i = 0; i < standardTasks.length; i++) {
+    var taskDef = standardTasks[i];
+    gs.info('Creating task: ' + taskDef.title);
+    
+    try {
+      var taskGr = new GlideRecord('x_1876152_hr_off_0_offboarding_task');
+      taskGr.initialize();
+      
+      taskGr.setValue('offboarding_case', caseSysId);
+      taskGr.setValue('task_type', taskDef.type);
+      taskGr.setValue('responsible_department', taskDef.department);
+      taskGr.setValue('short_description', taskDef.title);
+      taskGr.setValue('task_instructions', taskDef.instructions);
+      taskGr.setValue('priority', taskDef.priority);
+      taskGr.setValue('state', 1); // New
+      taskGr.setValue('auto_generated', true);
+      
+      // Calculate expected completion date
+      var expectedDate = new GlideDate(baseDate);
+      expectedDate.addDaysUTC(taskDef.days_offset);
+      taskGr.setValue('expected_completion_date', expectedDate.getDisplayValue());
+      
+      var taskSysId = taskGr.insert();
+      if (taskSysId) {
+        tasksCreated++;
+        gs.info('Successfully created task: ' + taskDef.title + ' with sys_id: ' + taskSysId);
+      } else {
+        gs.error('Failed to create task: ' + taskDef.title);
+      }
+    } catch (taskError) {
+      gs.error('Error creating task ' + taskDef.title + ': ' + taskError.message);
+    }
+  }
+
+  // Update the case to mark tasks as generated
+  if (tasksCreated > 0) {
+    try {
+      var caseUpdate = new GlideRecord('x_1876152_hr_off_0_offboarding_case');
+      if (caseUpdate.get(caseSysId)) {
+        caseUpdate.setValue('tasks_generated', true);
+        caseUpdate.setValue('workflow_status', 'it_tasks_created');
+        caseUpdate.update();
+        gs.info('Updated case to mark tasks as generated');
+      }
+    } catch (updateError) {
+      gs.error('Error updating case: ' + updateError.message);
+    }
+  }
+
+  return tasksCreated;
+}
+
+// Run the debug function
+debugOffboardingTaskGeneration();]]></content>
+        <external_source>false</external_source>
+        <path>x_1876152_hr_off_0/x-1876152-hr-offboarding-integration/1.0.0/src/server/debugOffboarding.js</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-04-30 18:11:01</sys_created_on>
+        <sys_id>8dc5f16bc95f438193304d277cec3fc7</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1876152_hr_off_0/x-1876152-hr-offboarding-integration/1.0.0/src/server/debugOffboarding.js</sys_name>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_update_name>sys_module_8dc5f16bc95f438193304d277cec3fc7</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-04-30 18:11:01</sys_updated_on>
+    </sys_module>
+</record_update>

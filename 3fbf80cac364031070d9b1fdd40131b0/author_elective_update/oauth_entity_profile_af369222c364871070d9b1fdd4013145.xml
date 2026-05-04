@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="oauth_entity_profile">
+    <oauth_entity_profile action="DELETE">
+        <default>true</default>
+        <grant_type>password</grant_type>
+        <jwt_provider/>
+        <name>Postman Integration default_profile</name>
+        <oauth_entity display_value="Postman Integration">5c2592aac324871070d9b1fdd40131be</oauth_entity>
+        <oauth_resources/>
+        <saml2_assertion_producer/>
+        <sys_class_name>oauth_entity_profile</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-02 15:05:43</sys_created_on>
+        <sys_id>af369222c364871070d9b1fdd4013145</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Postman Integration default_profile</sys_name>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_update_name>oauth_entity_profile_af369222c364871070d9b1fdd4013145</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-02 15:05:43</sys_updated_on>
+    </oauth_entity_profile>
+<sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</application>
+        <file_path/>
+        <instance_id>f087bcc9932c0bd4401cddd548373c21</instance_id>
+        <instance_name>dev392893</instance_name>
+        <name>oauth_entity_profile_af369222c364871070d9b1fdd4013145</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="oauth_entity_profile">
+    <oauth_entity_profile action="INSERT_OR_UPDATE">
+        <default>true</default>
+        <grant_type>password</grant_type>
+        <jwt_provider/>
+        <name>Postman Integration default_profile</name>
+        <oauth_entity display_value="Postman Integration">5c2592aac324871070d9b1fdd40131be</oauth_entity>
+        <oauth_resources/>
+        <saml2_assertion_producer/>
+        <sys_class_name>oauth_entity_profile</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-02 15:05:43</sys_created_on>
+        <sys_id>af369222c364871070d9b1fdd4013145</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Postman Integration default_profile</sys_name>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_update_name>oauth_entity_profile_af369222c364871070d9b1fdd4013145</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-02 15:05:43</sys_updated_on>
+    </oauth_entity_profile>
+</record_update>]]></payload>
+        <payload_hash>1013494256</payload_hash>
+        <record_name>Postman Integration default_profile</record_name>
+        <reverted_from/>
+        <source>bd06df22c360c310141c9e377d0131a9</source>
+        <source_table>sys_upgrade_history</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-02 19:43:51</sys_created_on>
+        <sys_id>2d161f62c360c310141c9e377d013144</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>19dea3800690000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-02 19:43:51</sys_updated_on>
+        <type>OAuth Entity Profile</type>
+        <update_guid>e9161f627060c3108614a063edf64144</update_guid>
+        <update_guid_history>e9161f627060c3108614a063edf64144:1013494256</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="Postman Integration default_profile">34e75df6c3600710141c9e377d0131af</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-05-03 05:10:58</sys_created_on>
+        <sys_db_object display_value="" name="oauth_entity_profile">oauth_entity_profile</sys_db_object>
+        <sys_id>6e2beb53657743a0a89b4fc54ff9e400</sys_id>
+        <sys_metadata>af369222c364871070d9b1fdd4013145</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Postman Integration default_profile</sys_name>
+        <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
+        <sys_parent/>
+        <sys_policy/>
+        <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
+        <sys_scope_delete display_value="">0421fb3fd39e452684a796cde63e5101</sys_scope_delete>
+        <sys_update_name>oauth_entity_profile_af369222c364871070d9b1fdd4013145</sys_update_name>
+        <sys_update_version display_value="oauth_entity_profile_af369222c364871070d9b1fdd4013145">2d161f62c360c310141c9e377d013144</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-05-03 05:10:58</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_db_object">
     <sys_db_object action="INSERT_OR_UPDATE">
-        <access/>
+        <access>public</access>
         <actions_access>false</actions_access>
         <alter_access>false</alter_access>
         <caller_access/>
@@ -16,7 +16,7 @@
         <label>Offboarding Task</label>
         <live_feed_enabled>false</live_feed_enabled>
         <name>x_1876152_hr_off_0_offboarding_task</name>
-        <number_ref/>
+        <number_ref display_value="OFFTASK">37046903c36c8b1070d9b1fdd401312b</number_ref>
         <provider_class/>
         <read_access>true</read_access>
         <scriptable_table>false</scriptable_table>
@@ -25,14 +25,14 @@
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2026-04-30 16:33:47</sys_created_on>
         <sys_id>bd671c8ec364031070d9b1fdd401310d</sys_id>
-        <sys_mod_count>0</sys_mod_count>
-        <sys_name>HR Off 0 Offboarding Task</sys_name>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Offboarding Task</sys_name>
         <sys_package display_value="HR Offboarding Integration" source="x_1876152_hr_off_0">3fbf80cac364031070d9b1fdd40131b0</sys_package>
         <sys_policy/>
         <sys_scope display_value="HR Offboarding Integration">3fbf80cac364031070d9b1fdd40131b0</sys_scope>
         <sys_update_name>sys_db_object_bd671c8ec364031070d9b1fdd401310d</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2026-04-30 16:33:47</sys_updated_on>
+        <sys_updated_on>2026-05-04 00:42:38</sys_updated_on>
         <update_access>true</update_access>
         <user_role/>
         <ws_access>true</ws_access>
